@@ -1,0 +1,16 @@
+.app_wrap {
+  height: 100vh;
+  display: grid;
+  grid-template:
+    "topSpace"
+    "bottomSpace";
+  grid-template-rows: 80px 1fr;
+}
+.app_top {
+  grid-area: topSpace;
+  background-color: rgb(197, 255, 255);
+}
+.app_bottom {
+  grid-area: bottomSpace;
+  background-color: rgb(205, 253, 207);
+}
