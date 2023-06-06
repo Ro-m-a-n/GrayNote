@@ -1,0 +1,21 @@
+.workSpace_wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  height: 100%;
+
+  .note {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    font-size: 1rem;
+  }
+  .date {
+    font-size: small;
+    color: $dateWorkSpaceColor;
+  }
+}

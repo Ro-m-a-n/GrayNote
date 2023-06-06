@@ -52,16 +52,21 @@ export const deleteNoteAPI = async (id: string) => {
   }
 };
 
-// export const updateNoteAPI = (noteId, newNote) =>
-//   fetch(API_URL + `${app_id}/dtypes/${noteId}.json`, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json;charset=utf-8",
-//     },
-//     body: JSON.stringify({
-//       rest_api_key: API_KEY,
-//       values: {
-//         cyW4vsW5fiW47dIg8uWOfD: newNote,
-//       },
-//     }),
-//   });
+export const updateNoteAPI = async (currentId: string, newNote: string) => {
+  try {
+    await fetch(API_URL + `${app_id}/dtypes/${currentId}.json`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify({
+        rest_api_key: API_KEY,
+        values: {
+          dcSdutWOLaWQHznSkZmmoW: newNote,
+        },
+      }),
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

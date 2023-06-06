@@ -1,16 +1,16 @@
+@import "./global/colors";
 .app_wrap {
   height: 100vh;
   display: grid;
   grid-template:
     "topSpace"
     "bottomSpace";
-  grid-template-rows: 80px 1fr;
+  grid-template-rows: 85px 1fr;
 }
 .app_top {
   grid-area: topSpace;
-  background-color: rgb(197, 255, 255);
+  background-color: $navBarColor;
 }
 .app_bottom {
   grid-area: bottomSpace;
-  background-color: rgb(205, 253, 207);
 }

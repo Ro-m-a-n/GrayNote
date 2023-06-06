@@ -1,11 +1,11 @@
 import { actualDate } from "../../../globalFunc/dateFormat";
-import { noteType, setCurrentIdAC } from "../../../store/appReducer";
+import { noteType, setCurrentNoteAC } from "../../../store/appReducer";
 import { useAppDispatch } from "../../../store/hooks";
 
 export const Note = (props: noteType) => {
   const dispatch = useAppDispatch();
   const handleClick = () => {
-    dispatch(setCurrentIdAC(props.id));
+    dispatch(setCurrentNoteAC(props.id, props.value, props.created_at));
   };
   const noteDevide = (note: string) => {
     const regex = /^([^\n.]{0,200}[^\s])[\n.]?([\s\S]*)$/; // Matches up to 200 characters, then a non-space character, followed by a dot or a new line, and captures the rest of the text
@@ -21,7 +21,7 @@ export const Note = (props: noteType) => {
   let devidedNote = noteDevide(props.value);
 
   return (
-    <div className="note_wrap" onClick={handleClick} id={props.id}>   
+    <div className="note_wrap" onClick={handleClick}>
       <div className="header">{devidedNote[0]}</div>
       <div className="bottom">
         <div>{actualDate(props.created_at)}</div>
