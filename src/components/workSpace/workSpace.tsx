@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 const WorkSpace = () => {
   const dispatch = useAppDispatch();
   const currentNote = useAppSelector((state) => state.app.currentNote);
+  const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(saveUserTextAC(e.target.value));
   };
@@ -18,7 +19,7 @@ const WorkSpace = () => {
           toFormatDateFull(currentNote.currentCreated_at)}
       </div>
       <textarea
-        // readOnly={isReadOnly}
+        readOnly={!isNoteEditable}
         value={currentNote.currentValue}
         onChange={handleChange}
         className="note"

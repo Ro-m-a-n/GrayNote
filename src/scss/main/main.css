@@ -110,6 +110,9 @@ select {
 .navBar_wrap .buttons_wrap .editIcon {
   margin-left: 4px;
 }
+.navBar_wrap .buttons_wrap .pressedButton {
+  background-color: rgb(190, 250, 190);
+}
 
 .noteList_wrap {
   height: 100%;

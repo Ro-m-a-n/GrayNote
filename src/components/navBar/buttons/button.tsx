@@ -7,10 +7,11 @@ type propsType = {
   type: string;
   iconClass: string;
   disabled?: boolean;
-  btnFunc: () => void;
+  buttonFunction: () => void;
+  pressedButton?: string;
 };
 export const Button = (props: propsType) => {
-  let CurrentButton = () => {
+  const CurrentIcon = () => {
     switch (props.type) {
       case "back":
         return <IoMdArrowBack className={`${props.iconClass}`} />;
@@ -29,11 +30,11 @@ export const Button = (props: propsType) => {
   };
   return (
     <button
-      onClick={props.btnFunc}
-      className="Button"
+      onClick={props.buttonFunction}
+      className={`Button ${props.pressedButton}`}
       disabled={props.disabled}
     >
-      <CurrentButton />
+      <CurrentIcon />
     </button>
   );
 };
