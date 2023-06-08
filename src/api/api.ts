@@ -1,7 +1,7 @@
 const API_URL = "https://quintadb.com.ua/apps/";
-const formId = "cEfCooW5jcL4ZcLgdcGgaR";
-const app_id = "cQW7WJkaHcI4oDn2OUW4um";
-const API_KEY = "afjSkBW5rgcQ8QWRX6WQPo";
+const formId = "aHu8ozoejcLOtdK8kVvSom";
+const app_id = "bThWJcVmjlbBtcH8o9zmo_";
+const API_KEY = "baWRNdR8jeDOo-lsvVodzn";
 
 export const getNotesAPI = async () => {
   try {
@@ -26,7 +26,7 @@ export const createNoteAPI = async () => {
         rest_api_key: API_KEY,
         values: {
           entity_id: formId,
-          dcSdutWOLaWQHznSkZmmoW: "New note",
+          ddTSkIjunmWO5BDXfirrDx: "New note",
         },
       }),
     });
@@ -62,7 +62,7 @@ export const updateNoteAPI = async (currentId: string, newNote: string) => {
       body: JSON.stringify({
         rest_api_key: API_KEY,
         values: {
-          dcSdutWOLaWQHznSkZmmoW: newNote,
+          ddTSkIjunmWO5BDXfirrDx: newNote,
         },
       }),
     });

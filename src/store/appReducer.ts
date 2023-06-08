@@ -17,27 +17,11 @@ const SAVE_USER_TEXT = "SAVE_USER_TEXT";
 const FILTER_NOTES_BY_SEARCH = "FILTER_NOTES_BY_SEARCH";
 const SET_IS_NOTE_EDITABLE = "SET_IS_NOTE_EDITABLE";
 
-export const value = "dcSdutWOLaWQHznSkZmmoW";
-// let obj = {
-//   records: [
-//     {
-//       id: "dcOComWRTdQi_dKSoZewj-",
-//       app_id: "cQW7WJkaHcI4oDn2OUW4um",
-//       entity_id: "cEfCooW5jcL4ZcLgdcGgaR",
-//       values: { dcSdutWOLaWQHznSkZmmoW: "hello " },
-//       rel_values: null,
-//       subform_values: {},
-//       approved: false,
-//       created_at: "2023-05-30T12:02:00.000Z",
-//       updated_at: "2023-05-30T12:02:00.000Z",
-//       added_by: "remont-info@ukr.net",
-//       user_ids: null,
-//     },
-//   ],
-// };
+export const value = "ddTSkIjunmWO5BDXfirrDx";
+
 export type thunkType = ThunkAction<void, appStateType, unknown, actionsTypes>;
 type valuesType = {
-  dcSdutWOLaWQHznSkZmmoW: string;
+  ddTSkIjunmWO5BDXfirrDx: string;
 };
 type serverRecordsType = {
   id: string;
@@ -339,3 +323,4 @@ export default appReducer;
 
 // devide app reducer
 // making large width version
+// elipsis doesn`t work

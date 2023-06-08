@@ -120,30 +120,37 @@ select {
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
-  padding: 0 2px;
 }
 .noteList_wrap .note_wrap {
-  width: 100%;
+  display: flex;
+  align-items: center;
+  width: 96vw;
   height: 75px;
-  background-color: rgb(231, 231, 231);
   margin-top: 2px;
-  box-sizing: border-box;
   padding: 13px 15px;
-  white-space: nowrap;
+  background-color: rgb(231, 231, 231);
   cursor: pointer;
 }
 .noteList_wrap .note_wrap:hover {
   background-color: rgb(212, 212, 212);
   transition-duration: 0.3s;
 }
-.noteList_wrap .note_wrap .header {
+.noteList_wrap .note_wrap time {
+  font-size: small;
+  white-space: nowrap;
+}
+.noteList_wrap .note_wrap .rightSide {
+  width: 100%;
+  margin-left: 15px;
+  overflow: hidden;
+}
+.noteList_wrap .note_wrap .rightSide header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: bold;
 }
-.noteList_wrap .note_wrap .bottom .note {
-  margin-left: 10px;
+.noteList_wrap .note_wrap .rightSide .note {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

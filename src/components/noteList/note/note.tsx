@@ -22,9 +22,9 @@ export const Note = (props: noteType) => {
 
   return (
     <div className="note_wrap" onClick={handleClick}>
-      <header className="header">{devidedNote[0]}</header>
-      <div className="bottom">
-        <time>{actualDate(props.created_at)}</time>
+      <time>{actualDate(props.created_at)}</time>
+      <div className="rightSide">
+        <header>{devidedNote[0]}</header>
         <p className="note">{devidedNote[1]}</p>
       </div>
     </div>

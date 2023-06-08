@@ -11,27 +11,33 @@
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
-  padding: 0 2px;
+
   .note_wrap {
-    width: 100%;
+    display: flex;
+    align-items: center;
+    width: 96vw;
     height: 75px;
-    background-color: $baseColor;
     margin-top: 2px;
-    box-sizing: border-box;
     padding: 13px 15px;
-    white-space: nowrap;
+    background-color: $baseColor;
     cursor: pointer;
     &:hover {
       background-color: $baseColorHover;
       transition-duration: 0.3s;
     }
-    .header {
-      @include elipsis;
-      font-weight: bold;
+    time {
+      font-size: small;
+      white-space: nowrap;
     }
-    .bottom {
+    .rightSide {
+      width: 100%;
+      margin-left: 15px;
+      overflow: hidden;
+      header {
+        @include elipsis;
+        font-weight: bold;
+      }
       .note {
-        margin-left: 10px;
         @include elipsis;
       }
     }
