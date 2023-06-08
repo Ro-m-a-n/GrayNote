@@ -1,6 +1,6 @@
 import { ModalWindow } from "../../globalComponents/modalWindow/modal";
 import { toFormatDateFull } from "../../globalFunc/dateFormat";
-import { saveUserTextAC } from "../../store/appReducer";
+import { onNoteChange } from "../../store/appReducer";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
 const WorkSpace = () => {
@@ -8,7 +8,7 @@ const WorkSpace = () => {
   const currentNote = useAppSelector((state) => state.app.currentNote);
   const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch(saveUserTextAC(e.target.value));
+    dispatch(onNoteChange(e.target.value));
   };
 
   return (

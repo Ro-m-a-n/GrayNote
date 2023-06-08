@@ -3,12 +3,12 @@ import WorkSpace from "./components/workSpace/workSpace";
 import { NoteList } from "./components/noteList/noteList";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { useEffect } from "react";
-import { getNotes } from "./store/appReducer";
+import { getNotes, onAppStart, updateNote } from "./store/appReducer";
 function App() {
   const currentId = useAppSelector((state) => state.app.currentNote?.currentId);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(getNotes()); //download notes from server at app start
+    dispatch(onAppStart());
   }, []);
 
   return (

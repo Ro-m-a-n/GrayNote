@@ -16,6 +16,7 @@ const CREATE_NOTE = "CREATE_NOTE";
 const SAVE_USER_TEXT = "SAVE_USER_TEXT";
 const FILTER_NOTES_BY_SEARCH = "FILTER_NOTES_BY_SEARCH";
 const SET_IS_NOTE_EDITABLE = "SET_IS_NOTE_EDITABLE";
+
 export const value = "dcSdutWOLaWQHznSkZmmoW";
 // let obj = {
 //   records: [
@@ -99,6 +100,7 @@ type setIsNoteEditableACType = {
   type: typeof SET_IS_NOTE_EDITABLE;
   value: boolean;
 };
+
 type actionsTypes =
   | setNotesACType
   | deleteNoteACType
@@ -238,6 +240,7 @@ export const setIsNoteEditableAC = (
   type: SET_IS_NOTE_EDITABLE,
   value,
 });
+
 export const getNotes = (): thunkType => async (dispatch) => {
   let res = await getNotesAPI();
   let notes = res.records.map((item: serverRecordsType) => {
@@ -288,13 +291,15 @@ export const returnToList = (): thunkType => async (dispatch, getState) => {
   dispatch(setCurrentNoteAC("", "", "")); // reset curent note
   dispatch(getNotes()); //refresh notes
 };
-export const updateNote = (): thunkType => async (dispatch, getState) => {
-  await updateNoteAPI(
-    //save user text when he switch notes
-    getState().app.currentNote.currentId,
-    getState().app.currentNote.currentValue
-  );
-};
+export const updateNote =
+  (currentId?: string, currentValue?: string): thunkType =>
+  async (dispatch, getState) => {
+    await updateNoteAPI(
+      //save user text when he switch notes
+      currentId || getState().app.currentNote.currentId,
+      currentValue || getState().app.currentNote.currentValue
+    );
+  };
 export const onNoteClick =
   (id: string, value: string, created_at: string): thunkType =>
   async (dispatch, getState) => {
@@ -308,5 +313,29 @@ export const onNoteClick =
     dispatch(setCurrentNoteAC(id, value, created_at)); //set this note to current
     dispatch(setIsNoteEditableAC(true)); // make note editable at first open
   };
+export const onNoteChange =
+  (value: string): thunkType =>
+  (dispatch, getState) => {
+    dispatch(saveUserTextAC(value));
+    let currentId = getState().app.currentNote.currentId;
+    let created_at = getState().app.currentNote.currentCreated_at;
+    let stingifyNoteValue = JSON.stringify({ currentId, value, created_at });
+    localStorage.setItem("currentNote", stingifyNoteValue);
+  };
+
+export const onAppStart = (): thunkType => async (dispatch) => {
+  const value = localStorage.getItem("currentNote");
+  if (typeof value === "string") {
+    //for typescript
+    const localCurrentNote = JSON.parse(value);
+    await updateNoteAPI(localCurrentNote.currentId, localCurrentNote.value);
+    // restore data from local storage if it exist
+    localStorage.clear();
+  }
+  dispatch(getNotes()); //download notes from server at app start
+};
 
 export default appReducer;
+
+// devide app reducer
+// making large width version
