@@ -323,4 +323,3 @@ export default appReducer;
 
 // devide app reducer
 // making large width version
-// elipsis doesn`t work
