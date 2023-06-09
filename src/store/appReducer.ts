@@ -240,23 +240,30 @@ export const getNotes = (): thunkType => async (dispatch) => {
 };
 
 export const createNote = (): thunkType => async (dispatch, getState) => {
-  let res = await createNoteAPI();
+  let currentId = getState().app.currentNote.currentId;
+  let currentValue = getState().app.currentNote.currentValue;
+  let res = await createNoteAPI(); //create new note in server
   let newNote = {
+    // make from server response require format
     value: res.record.values[value],
     id: res.record.id,
     created_at: res.record.created_at,
   };
-  if (getState().app.currentNote.currentId) {
-    dispatch(updateNote());
-  }
+  dispatch(createNoteAC(newNote)); //adding new note to storage
+  await updateNoteAPI(
+    //send note data to server
+    currentId,
+    currentValue
+  );
+  dispatch(getNotes()); //refresh notes
   dispatch(
     setCurrentNoteAC(
+      //set note from response to current
       res.record.id,
       "", //displaying new empty note at first entering,
       res.record.created_at
     )
-  ); //set note from response to current
-  dispatch(createNoteAC(newNote)); //adding new note to storage
+  );
 };
 
 export const deleteNote = (): thunkType => async (dispatch, getState) => {
@@ -267,13 +274,21 @@ export const deleteNote = (): thunkType => async (dispatch, getState) => {
 };
 
 export const returnToList = (): thunkType => async (dispatch, getState) => {
-  await updateNoteAPI(
-    //save user text when he switch notes
-    getState().app.currentNote.currentId,
-    getState().app.currentNote.currentValue
-  );
+  let currentId = getState().app.currentNote.currentId;
+  let currentValue = getState().app.currentNote.currentValue;
+  if (!currentValue) {
+    // in case when user press "back" when note is empty
+    await deleteNoteAPI(currentId); // deleting note by server
+    dispatch(deleteNoteAC(currentId)); // if ok, deleting note by reducer
+  } else {
+    await updateNoteAPI(
+      //send note data to server
+      currentId,
+      currentValue
+    );
+    dispatch(getNotes()); //refresh notes
+  }
   dispatch(setCurrentNoteAC("", "", "")); // reset curent note
-  dispatch(getNotes()); //refresh notes
 };
 export const updateNote =
   (currentId?: string, currentValue?: string): thunkType =>
@@ -287,15 +302,20 @@ export const updateNote =
 export const onNoteClick =
   (id: string, value: string, created_at: string): thunkType =>
   async (dispatch, getState) => {
-    if (getState().app.currentNote.currentId) {
-      //save user text when he switch notes
-      await updateNoteAPI(
-        getState().app.currentNote.currentId,
-        getState().app.currentNote.currentValue
-      );
+    let previousNoteId = getState().app.currentNote.currentId;
+    let previousNoteValue = getState().app.currentNote.currentValue;
+    if (previousNoteId && previousNoteValue) {
+      // in case there are exist previous note
+      //save previous user note when he switch notes
+      await updateNoteAPI(previousNoteId, previousNoteValue);
+      dispatch(getNotes()); // update list of notes
+    } else if (previousNoteId && previousNoteValue === "") {
+      // in case there are exist previous note but with empty value
+      await deleteNoteAPI(previousNoteId); // deleting note by server
+      dispatch(deleteNoteAC(previousNoteId)); // if ok, deleting note by reducer
     }
-    dispatch(setCurrentNoteAC(id, value, created_at)); //set this note to current
-    dispatch(setIsNoteEditableAC(true)); // make note editable at first open
+    dispatch(setCurrentNoteAC(id, value, created_at)); //set active note to current
+    dispatch(setIsNoteEditableAC(true)); // make note editable at first opening
   };
 export const onNoteChange =
   (value: string): thunkType =>
@@ -321,10 +341,9 @@ export const onAppStart = (): thunkType => async (dispatch) => {
 
 export default appReducer;
 
-// making large width version
-// if note is empty - delete
-// if note empty unable +button
 // prevent neddles update
 // use memo somewhere
 // add active note
 // devide app reducer
+// modal window
+// search bug

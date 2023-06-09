@@ -12,6 +12,9 @@ import { useState } from "react";
 
 const NavBar = () => {
   const currentId = useAppSelector((state) => state.app.currentNote?.currentId);
+  const currentValue = useAppSelector(
+    (state) => state.app.currentNote?.currentValue
+  );
   const dispatch = useAppDispatch();
   const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
   const [pressedButton, setPressedButton] = useState(""); //className for pressed button
@@ -45,7 +48,12 @@ const NavBar = () => {
           buttonFunction={handleBack}
           disabled={!currentId}
         />
-        <Button type="add" iconClass="icon" buttonFunction={handleAdd} />
+        <Button
+          type="add"
+          iconClass="icon"
+          buttonFunction={handleAdd}
+          disabled={currentId !== "" && !currentValue}
+        />
         <Button
           type="delete"
           iconClass="icon"
