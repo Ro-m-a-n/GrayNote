@@ -3,7 +3,7 @@ import WorkSpace from "./components/workSpace/workSpace";
 import { NoteList } from "./components/noteList/noteList";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { useEffect } from "react";
-import { getNotes, onAppStart, updateNote } from "./store/appReducer";
+import { onAppStart } from "./store/appReducer";
 function App() {
   const currentId = useAppSelector((state) => state.app.currentNote?.currentId);
   const dispatch = useAppDispatch();
@@ -17,7 +17,13 @@ function App() {
         <NavBar />
       </div>
       <div className="app_bottom">
-        {currentId ? <WorkSpace /> : <NoteList />}
+        <span className="mobileOnly">
+          {currentId ? <WorkSpace /> : <NoteList />}
+        </span>
+        <span className="desktopOnly">
+          <NoteList />
+          <WorkSpace />
+        </span>
       </div>
     </div>
   );

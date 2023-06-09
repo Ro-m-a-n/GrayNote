@@ -1,9 +1,12 @@
 @import "../../../scss/global/colors";
+@import '../../../scss/global/brakepoints';
 .search_wrap {
   position: relative;
   width: 100%;
   margin: 0 auto;
-
+  @include media(">phone") {
+   margin-left: 20%;
+  }
   input {
     padding: 0.3rem 1.2rem;
     border: 1px solid $baseColor;

@@ -1,4 +1,5 @@
 @import "./global/colors";
+@import "./global/brakepoints";
 .app_wrap {
   height: 100vh;
   display: grid;
@@ -6,12 +7,29 @@
     "topSpace"
     "bottomSpace";
   grid-template-rows: 85px 1fr;
-}
-.app_top {
-  grid-area: topSpace;
-  background-color: $navBarColor;
-}
-.app_bottom {
-  grid-area: bottomSpace;
-  overflow: hidden;
+
+  @include media(">phone") {
+    grid-template-rows: 50px 1fr;
+  }
+  .app_top {
+    grid-area: topSpace;
+    background-color: $navBarColor;
+  }
+  .app_bottom {
+    grid-area: bottomSpace;
+    overflow: hidden;
+    .desktopOnly {
+      display: none;
+    }
+
+    @include media(">phone") {
+      .desktopOnly {
+        display: flex;
+        height: 100%;
+      }
+      .mobileOnly {
+        display: none;
+      }
+    }
+  }
 }

@@ -76,6 +76,12 @@ select {
   justify-content: space-evenly;
   padding: 0 2vw;
 }
+@media (min-width: 681px) {
+  .navBar_wrap {
+    flex-direction: row;
+    align-items: center;
+  }
+}
 .navBar_wrap .buttons_wrap {
   width: 100%;
   display: flex;
@@ -122,15 +128,26 @@ select {
   align-items: center;
   overflow-y: scroll;
 }
+@media (min-width: 681px) {
+  .noteList_wrap {
+    height: auto;
+  }
+}
 .noteList_wrap .note_wrap {
   display: flex;
   align-items: center;
-  width: 96vw;
   height: 75px;
+  min-height: 75px;
   margin-top: 5px;
   padding: 13px 15px;
   background-color: rgb(231, 231, 231);
+  width: 98%;
   cursor: pointer;
+}
+@media (min-width: 681px) {
+  .noteList_wrap .note_wrap {
+    max-width: 500px;
+  }
 }
 .noteList_wrap .note_wrap:hover {
   background-color: rgb(212, 212, 212);
@@ -179,15 +196,30 @@ select {
   grid-template: "topSpace" "bottomSpace";
   grid-template-rows: 85px 1fr;
 }
-
-.app_top {
+@media (min-width: 681px) {
+  .app_wrap {
+    grid-template-rows: 50px 1fr;
+  }
+}
+.app_wrap .app_top {
   grid-area: topSpace;
   background-color: rgb(212, 212, 212);
 }
-
-.app_bottom {
+.app_wrap .app_bottom {
   grid-area: bottomSpace;
   overflow: hidden;
+}
+.app_wrap .app_bottom .desktopOnly {
+  display: none;
+}
+@media (min-width: 681px) {
+  .app_wrap .app_bottom .desktopOnly {
+    display: flex;
+    height: 100%;
+  }
+  .app_wrap .app_bottom .mobileOnly {
+    display: none;
+  }
 }
 
 .workSpace_wrap {
@@ -196,6 +228,12 @@ select {
   align-items: center;
   padding: 10px;
   height: 100%;
+  width: 100%;
+}
+@media (min-width: 681px) {
+  .workSpace_wrap {
+    height: auto;
+  }
 }
 .workSpace_wrap .note {
   border: none;
@@ -205,6 +243,23 @@ select {
   height: 100%;
   margin-top: 5px;
   font-size: 1rem;
+  overflow-y: scroll;
+}
+.workSpace_wrap .note::-webkit-scrollbar {
+  width: 8px;
+}
+.workSpace_wrap .note::-webkit-scrollbar-track {
+  margin: 5px 0;
+  background-color: white;
+  border-radius: 4px;
+}
+.workSpace_wrap .note::-webkit-scrollbar-thumb {
+  background-color: rgb(212, 212, 212);
+  height: 100px;
+  border-radius: 4px;
+}
+.workSpace_wrap .note::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(231, 231, 231);
 }
 .workSpace_wrap .date {
   font-size: small;
@@ -215,6 +270,11 @@ select {
   position: relative;
   width: 100%;
   margin: 0 auto;
+}
+@media (min-width: 681px) {
+  .search_wrap {
+    margin-left: 20%;
+  }
 }
 .search_wrap input {
   padding: 0.3rem 1.2rem;

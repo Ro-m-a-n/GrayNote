@@ -16,7 +16,8 @@ const NavBar = () => {
   const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
   const [pressedButton, setPressedButton] = useState(""); //className for pressed button
   useEffect(() => {
-    if (isNoteEditable) { //make background green if button is pressed
+    if (isNoteEditable) {
+      //make background green if button is pressed
       setPressedButton("pressedButton");
     } else {
       setPressedButton("");

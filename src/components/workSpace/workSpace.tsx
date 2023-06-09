@@ -19,7 +19,7 @@ const WorkSpace = () => {
           toFormatDateFull(currentNote.currentCreated_at)}
       </div>
       <textarea
-        readOnly={!isNoteEditable}
+        readOnly={!currentNote.currentId || !isNoteEditable}
         value={currentNote.currentValue}
         onChange={handleChange}
         className="note"

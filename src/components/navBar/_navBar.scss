@@ -1,11 +1,15 @@
 @import "../../scss/global/colors";
+@import "../../scss/global/brakepoints";
 .navBar_wrap {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   padding: 0 2vw;
-
+  @include media(">phone") {
+    flex-direction: row;
+    align-items: center;
+  }
   .buttons_wrap {
     width: 100%;
     display: flex;
