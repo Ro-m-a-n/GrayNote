@@ -321,5 +321,10 @@ export const onAppStart = (): thunkType => async (dispatch) => {
 
 export default appReducer;
 
-// devide app reducer
 // making large width version
+// if note is empty - delete
+// if note empty unable +button
+// prevent neddles update
+// use memo somewhere
+// add active note
+// devide app reducer
