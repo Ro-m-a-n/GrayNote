@@ -16,6 +16,7 @@ const CREATE_NOTE = "CREATE_NOTE";
 const SAVE_USER_TEXT = "SAVE_USER_TEXT";
 const FILTER_NOTES_BY_SEARCH = "FILTER_NOTES_BY_SEARCH";
 const SET_IS_NOTE_EDITABLE = "SET_IS_NOTE_EDITABLE";
+const UPDATE_NOTE = "UPDATE_NOTE";
 
 export const value = "ddTSkIjunmWO5BDXfirrDx";
 
@@ -84,6 +85,10 @@ type setIsNoteEditableACType = {
   type: typeof SET_IS_NOTE_EDITABLE;
   value: boolean;
 };
+type updateNoteACType = {
+  type: typeof UPDATE_NOTE;
+  currentNote?: currentNoteType;
+};
 
 type actionsTypes =
   | setNotesACType
@@ -94,7 +99,8 @@ type actionsTypes =
   | createNoteACType
   | saveUserTextACType
   | filterNotesBySearchACType
-  | setIsNoteEditableACType;
+  | setIsNoteEditableACType
+  | updateNoteACType;
 
 let initialState = {
   notes: ([] as Array<noteType>) || null,
@@ -174,6 +180,28 @@ let appReducer = (
         ...state,
         isNoteEditable: action.value,
       };
+    case UPDATE_NOTE:
+      const newNotes = state.notes.map((note) => {
+        if (
+          note.id ===
+          (action.currentNote?.currentId || state.currentNote.currentId)
+        ) {
+          return {
+            id: action.currentNote?.currentId || state.currentNote.currentId,
+            value:
+              action.currentNote?.currentValue ||
+              state.currentNote.currentValue,
+            created_at:
+              action.currentNote?.currentCreated_at ||
+              state.currentNote.currentCreated_at,
+          };
+        }
+        return note;
+      });
+      return {
+        ...state,
+        notes: newNotes,
+      };
 
     default:
       return state;
@@ -224,7 +252,12 @@ export const setIsNoteEditableAC = (
   type: SET_IS_NOTE_EDITABLE,
   value,
 });
-
+export const updateNoteAC = (
+  currentNote?: currentNoteType
+): updateNoteACType => ({
+  type: UPDATE_NOTE,
+  currentNote,
+});
 export const getNotes = (): thunkType => async (dispatch) => {
   let res = await getNotesAPI();
   let notes = res.records.map((item: serverRecordsType) => {
@@ -242,6 +275,12 @@ export const getNotes = (): thunkType => async (dispatch) => {
 export const createNote = (): thunkType => async (dispatch, getState) => {
   let currentId = getState().app.currentNote.currentId;
   let currentValue = getState().app.currentNote.currentValue;
+  await updateNoteAPI(
+    //if there was any opened note, save note data to server
+    currentId,
+    currentValue
+  );
+  dispatch(updateNoteAC()); // if ok, update note by reducers
   let res = await createNoteAPI(); //create new note in server
   let newNote = {
     // make from server response require format
@@ -249,13 +288,8 @@ export const createNote = (): thunkType => async (dispatch, getState) => {
     id: res.record.id,
     created_at: res.record.created_at,
   };
+
   dispatch(createNoteAC(newNote)); //adding new note to storage
-  await updateNoteAPI(
-    //send note data to server
-    currentId,
-    currentValue
-  );
-  dispatch(getNotes()); //refresh notes
   dispatch(
     setCurrentNoteAC(
       //set note from response to current
@@ -276,7 +310,7 @@ export const deleteNote = (): thunkType => async (dispatch, getState) => {
 export const returnToList = (): thunkType => async (dispatch, getState) => {
   let currentId = getState().app.currentNote.currentId;
   let currentValue = getState().app.currentNote.currentValue;
-  if (!currentValue) {
+  if (currentId && !currentValue) {
     // in case when user press "back" when note is empty
     await deleteNoteAPI(currentId); // deleting note by server
     dispatch(deleteNoteAC(currentId)); // if ok, deleting note by reducer
@@ -286,7 +320,7 @@ export const returnToList = (): thunkType => async (dispatch, getState) => {
       currentId,
       currentValue
     );
-    dispatch(getNotes()); //refresh notes
+    dispatch(updateNoteAC()); //refresh notes by reducer
   }
   dispatch(setCurrentNoteAC("", "", "")); // reset curent note
 };
@@ -305,10 +339,10 @@ export const onNoteClick =
     let previousNoteId = getState().app.currentNote.currentId;
     let previousNoteValue = getState().app.currentNote.currentValue;
     if (previousNoteId && previousNoteValue) {
-      // in case there are exist previous note
+      // in case there are exist not empty previous note
       //save previous user note when he switch notes
       await updateNoteAPI(previousNoteId, previousNoteValue);
-      dispatch(getNotes()); // update list of notes
+      dispatch(updateNoteAC()); // update previous notes
     } else if (previousNoteId && previousNoteValue === "") {
       // in case there are exist previous note but with empty value
       await deleteNoteAPI(previousNoteId); // deleting note by server
@@ -338,12 +372,14 @@ export const onAppStart = (): thunkType => async (dispatch) => {
   }
   dispatch(getNotes()); //download notes from server at app start
 };
+export const onSearch =
+  (searchQuery: string): thunkType =>
+  (dispatch) => {
+    dispatch(returnToList());
+    dispatch(filterNotesBySearchAC(searchQuery));
+  };
 
 export default appReducer;
 
-// prevent neddles update
 // use memo somewhere
-// add active note
 // devide app reducer
-// modal window
-// search bug

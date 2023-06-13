@@ -1,11 +1,11 @@
-import { filterNotesBySearchAC } from "../../../store/appReducer";
+import { onSearch } from "../../../store/appReducer";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 
 export const Search = () => {
   const dispatch = useAppDispatch();
   const searchQuery = useAppSelector((state) => state.app.searchQuery);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(filterNotesBySearchAC(e.target.value));
+    dispatch(onSearch(e.target.value));
   };
   return (
     <div className="search_wrap">

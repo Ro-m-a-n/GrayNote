@@ -130,6 +130,7 @@ select {
 }
 @media (min-width: 681px) {
   .noteList_wrap {
+    min-width: 300px;
     height: auto;
   }
 }
@@ -172,6 +173,9 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.noteList_wrap .activeNote {
+  background-color: rgb(212, 212, 212);
 }
 .noteList_wrap::-webkit-scrollbar {
   width: 8px;
@@ -283,4 +287,44 @@ select {
   font-size: 1rem;
   width: 100%;
   outline: none;
+}
+
+.modal_wrap {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.modal_wrap .modal {
+  position: fixed;
+  z-index: 2;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(212, 212, 212);
+  padding: 20px;
+  border-radius: 5px;
+  width: 60%;
+  min-width: 340px;
+  max-width: 400px;
+}
+.modal_wrap .modal h3 {
+  text-align: center;
+}
+.modal_wrap .modal .button_group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.modal_wrap .modal .button_group button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  width: 48%;
+}
+.modal_wrap .modal .button_group button:hover {
+  background-color: rgb(163, 200, 255);
 }/*# sourceMappingURL=main.css.map */

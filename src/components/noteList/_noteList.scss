@@ -9,6 +9,7 @@
   align-items: center;
   overflow-y: scroll;
   @include media(">phone") {
+    min-width: 300px;
     height: auto;
   }
   .note_wrap {
@@ -24,10 +25,12 @@
       max-width: 500px;
     }
     cursor: pointer;
+
     &:hover {
       background-color: $baseColorHover;
       transition-duration: 0.3s;
     }
+
     time {
       font-size: small;
       white-space: nowrap;
@@ -44,6 +47,9 @@
         @include elipsis;
       }
     }
+  }
+  .activeNote {
+    background-color: $baseColorHover;
   }
   @include scrollBar($scrollBar);
 }
