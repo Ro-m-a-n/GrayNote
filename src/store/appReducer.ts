@@ -381,5 +381,5 @@ export const onSearch =
 
 export default appReducer;
 
-// use memo somewhere
+
 // devide app reducer
