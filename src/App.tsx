@@ -1,5 +1,5 @@
-import NavBar from "./components/navBar/navBar";
-import WorkSpace from "./components/workSpace/workSpace";
+import { NavBar } from "./components/navBar/navBar";
+import { WorkSpace } from "./components/workSpace/workSpace";
 import { NoteList } from "./components/noteList/noteList";
 import { useAppDispatch, useAppSelector } from "./store/hooks";
 import { useEffect } from "react";

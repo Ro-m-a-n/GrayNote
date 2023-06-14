@@ -12,6 +12,7 @@ type propsType = {
 };
 export const Button = (props: propsType) => {
   const CurrentIcon = () => {
+    console.log("rerender btn");
     switch (props.type) {
       case "back":
         return <IoMdArrowBack className={`${props.iconClass}`} />;

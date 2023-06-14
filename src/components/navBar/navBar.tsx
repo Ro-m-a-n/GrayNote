@@ -10,7 +10,7 @@ import { Search } from "./search/search";
 import { useEffect } from "react";
 import { useState } from "react";
 
-const NavBar = () => {
+export const NavBar = () => {
   const currentId = useAppSelector((state) => state.app.currentNote?.currentId);
   const currentValue = useAppSelector(
     (state) => state.app.currentNote?.currentValue
@@ -72,4 +72,3 @@ const NavBar = () => {
     </div>
   );
 };
-export default NavBar;

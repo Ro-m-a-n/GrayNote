@@ -3,7 +3,7 @@ import { toFormatDateFull } from "../../globalFunc/dateFormat";
 import { onNoteChange } from "../../store/appReducer";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-const WorkSpace = () => {
+export const WorkSpace = () => {
   const dispatch = useAppDispatch();
   const currentNote = useAppSelector((state) => state.app.currentNote);
   const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
@@ -27,4 +27,4 @@ const WorkSpace = () => {
     </div>
   );
 };
-export default WorkSpace;
+
