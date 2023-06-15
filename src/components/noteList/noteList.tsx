@@ -4,7 +4,7 @@ import { Note } from "./note/note";
 export const NoteList = () => {
   const notes = useAppSelector((state) => state.app.notes);
   const filteredNotesBySearch = useAppSelector(
-    (state) => state.app.filteredNotesBySearch
+    (state) => state.navBar.filteredNotesBySearch
   );
   return (
     <div className="noteList_wrap">

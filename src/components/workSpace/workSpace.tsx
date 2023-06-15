@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 export const WorkSpace = () => {
   const dispatch = useAppDispatch();
   const currentNote = useAppSelector((state) => state.app.currentNote);
-  const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
+  const isNoteEditable = useAppSelector((state) => state.navBar.isNoteEditable);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(onNoteChange(e.target.value));
   };
@@ -27,4 +27,3 @@ export const WorkSpace = () => {
     </div>
   );
 };
-

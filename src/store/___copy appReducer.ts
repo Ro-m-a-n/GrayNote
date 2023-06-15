@@ -1,18 +1,21 @@
 import { ThunkAction } from "redux-thunk";
 import { appStateType } from "./store";
-import { deleteNoteAPI, getNotesAPI, updateNoteAPI } from "../api/api";
 import {
-  closeModalACType,
-  filterNotesBySearchACType,
-  setIsNoteEditableAC,
-  setIsNoteEditableACType,
-} from "./navBarReducer";
+  createNoteAPI,
+  deleteNoteAPI,
+  getNotesAPI,
+  updateNoteAPI,
+} from "../api/api";
 
 const SET_NOTES = "SET_NOTES";
 const DELETE_NOTE = "DELETE_NOTE";
+const OPEN_MODAL = "OPEN_MODAL";
+const CLOSE_MODAL = "CLOSE_MODAL";
 const SET_CURRENT_NOTE = "SET_CURRENT_ID";
 const CREATE_NOTE = "CREATE_NOTE";
 const SAVE_USER_TEXT = "SAVE_USER_TEXT";
+const FILTER_NOTES_BY_SEARCH = "FILTER_NOTES_BY_SEARCH";
+const SET_IS_NOTE_EDITABLE = "SET_IS_NOTE_EDITABLE";
 const UPDATE_NOTE = "UPDATE_NOTE";
 
 export const value = "ddTSkIjunmWO5BDXfirrDx";
@@ -54,7 +57,12 @@ type deleteNoteACType = {
   type: typeof DELETE_NOTE;
   id: string;
 };
-
+type openModalACType = {
+  type: typeof OPEN_MODAL;
+};
+type closeModalACType = {
+  type: typeof CLOSE_MODAL;
+};
 type setCurrentNoteACType = {
   type: typeof SET_CURRENT_NOTE;
   id: string;
@@ -69,7 +77,14 @@ type saveUserTextACType = {
   type: typeof SAVE_USER_TEXT;
   value: string;
 };
-
+type filterNotesBySearchACType = {
+  type: typeof FILTER_NOTES_BY_SEARCH;
+  searchQuery: string;
+};
+type setIsNoteEditableACType = {
+  type: typeof SET_IS_NOTE_EDITABLE;
+  value: boolean;
+};
 type updateNoteACType = {
   type: typeof UPDATE_NOTE;
   currentNote?: currentNoteType;
@@ -78,13 +93,14 @@ type updateNoteACType = {
 type actionsTypes =
   | setNotesACType
   | deleteNoteACType
+  | openModalACType
+  | closeModalACType
   | setCurrentNoteACType
   | createNoteACType
   | saveUserTextACType
   | filterNotesBySearchACType
   | setIsNoteEditableACType
-  | updateNoteACType
-  | closeModalACType;
+  | updateNoteACType;
 
 let initialState = {
   notes: ([] as Array<noteType>) || null,
@@ -93,9 +109,13 @@ let initialState = {
     currentValue: "",
     currentCreated_at: "",
   } as currentNoteType,
+  isModalOpen: false as boolean,
+  searchQuery: "" as string,
+  filteredNotesBySearch: null as Array<noteType> | null,
+  isNoteEditable: true as boolean,
 };
 
-export const appReducer = (
+let appReducer = (
   state: InitialStateType = initialState,
   action: actionsTypes
 ) => {
@@ -114,7 +134,16 @@ export const appReducer = (
         ...state,
         notes: result,
       };
-
+    case OPEN_MODAL:
+      return {
+        ...state,
+        isModalOpen: true,
+      };
+    case CLOSE_MODAL:
+      return {
+        ...state,
+        isModalOpen: false,
+      };
     case SET_CURRENT_NOTE:
       return {
         ...state,
@@ -137,7 +166,20 @@ export const appReducer = (
           currentValue: action.value,
         },
       };
-
+    case FILTER_NOTES_BY_SEARCH:
+      const filteredNotes = state.notes.filter((note) =>
+        note.value.toLowerCase().includes(action.searchQuery.toLowerCase())
+      );
+      return {
+        ...state,
+        searchQuery: action.searchQuery,
+        filteredNotesBySearch: filteredNotes,
+      };
+    case SET_IS_NOTE_EDITABLE:
+      return {
+        ...state,
+        isNoteEditable: action.value,
+      };
     case UPDATE_NOTE:
       const newNotes = state.notes.map((note) => {
         if (
@@ -170,15 +212,16 @@ export const setNotesAC = (notes: Array<noteType>): setNotesACType => ({
   type: SET_NOTES,
   notes,
 });
-export const createNoteAC = (note: noteType): createNoteACType => ({
-  type: CREATE_NOTE,
-  note,
-});
 export const deleteNoteAC = (id: string): deleteNoteACType => ({
   type: DELETE_NOTE,
   id,
 });
-
+export const openModalAC = (): openModalACType => ({
+  type: OPEN_MODAL,
+});
+export const closeModalAC = (): closeModalACType => ({
+  type: CLOSE_MODAL,
+});
 export const setCurrentNoteAC = (
   id: string,
   value: string,
@@ -189,12 +232,26 @@ export const setCurrentNoteAC = (
   value,
   created_at,
 });
-
+export const createNoteAC = (note: noteType): createNoteACType => ({
+  type: CREATE_NOTE,
+  note,
+});
 export const saveUserTextAC = (value: string): saveUserTextACType => ({
   type: SAVE_USER_TEXT,
   value,
 });
-
+export const filterNotesBySearchAC = (
+  searchQuery: string
+): filterNotesBySearchACType => ({
+  type: FILTER_NOTES_BY_SEARCH,
+  searchQuery,
+});
+export const setIsNoteEditableAC = (
+  value: boolean
+): setIsNoteEditableACType => ({
+  type: SET_IS_NOTE_EDITABLE,
+  value,
+});
 export const updateNoteAC = (
   currentNote?: currentNoteType
 ): updateNoteACType => ({
@@ -215,6 +272,58 @@ export const getNotes = (): thunkType => async (dispatch) => {
   dispatch(setNotesAC(notes)); //seting notes
 };
 
+export const createNote = (): thunkType => async (dispatch, getState) => {
+  let currentId = getState().app.currentNote.currentId;
+  let currentValue = getState().app.currentNote.currentValue;
+  await updateNoteAPI(
+    //if there was any opened note, save note data to server
+    currentId,
+    currentValue
+  );
+  dispatch(updateNoteAC()); // if ok, update note by reducers
+  let res = await createNoteAPI(); //create new note in server
+  let newNote = {
+    // make from server response require format
+    value: res.record.values[value],
+    id: res.record.id,
+    created_at: res.record.created_at,
+  };
+
+  dispatch(createNoteAC(newNote)); //adding new note to storage
+  dispatch(
+    setCurrentNoteAC(
+      //set note from response to current
+      res.record.id,
+      "", //displaying new empty note at first entering,
+      res.record.created_at
+    )
+  );
+};
+
+export const deleteNote = (): thunkType => async (dispatch, getState) => {
+  await deleteNoteAPI(getState().app.currentNote.currentId); // deleting note by server
+  dispatch(deleteNoteAC(getState().app.currentNote.currentId)); // if ok, deleting note by reducer
+  dispatch(closeModalAC()); // closing modal window
+  dispatch(setCurrentNoteAC("", "", "")); // reset current note
+};
+
+export const returnToList = (): thunkType => async (dispatch, getState) => {
+  let currentId = getState().app.currentNote.currentId;
+  let currentValue = getState().app.currentNote.currentValue;
+  if (currentId && !currentValue) {
+    // in case when user press "back" when note is empty
+    await deleteNoteAPI(currentId); // deleting note by server
+    dispatch(deleteNoteAC(currentId)); // if ok, deleting note by reducer
+  } else {
+    await updateNoteAPI(
+      //send note data to server
+      currentId,
+      currentValue
+    );
+    dispatch(updateNoteAC()); //refresh notes by reducer
+  }
+  dispatch(setCurrentNoteAC("", "", "")); // reset curent note
+};
 export const updateNote =
   (currentId?: string, currentValue?: string): thunkType =>
   async (dispatch, getState) => {
@@ -234,13 +343,8 @@ export const onNoteClick =
       //save previous user note when he switch notes
       await updateNoteAPI(previousNoteId, previousNoteValue);
       dispatch(updateNoteAC()); // update previous notes
-    } else if (
-      previousNoteId &&
-      previousNoteValue === "" &&
-      previousNoteId !== id
-    ) {
+    } else if (previousNoteId && previousNoteValue === "") {
       // in case there are exist previous note but with empty value
-      // and if you dont click on the same note
       await deleteNoteAPI(previousNoteId); // deleting note by server
       dispatch(deleteNoteAC(previousNoteId)); // if ok, deleting note by reducer
     }
@@ -268,3 +372,14 @@ export const onAppStart = (): thunkType => async (dispatch) => {
   }
   dispatch(getNotes()); //download notes from server at app start
 };
+export const onSearch =
+  (searchQuery: string): thunkType =>
+  (dispatch) => {
+    dispatch(returnToList());
+    dispatch(filterNotesBySearchAC(searchQuery));
+  };
+
+export default appReducer;
+
+
+// devide app reducer

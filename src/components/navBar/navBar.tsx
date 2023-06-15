@@ -1,10 +1,10 @@
-import {
-  createNote,
-  openModalAC,
-  returnToList,
-  setIsNoteEditableAC,
-} from "../../store/appReducer";
+import { setIsNoteEditableAC } from "../../store/navBarReducer";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  openModalAC,
+  createNote,
+  returnToList,
+} from "../../store/navBarReducer";
 import { Button } from "./buttons/button";
 import { Search } from "./search/search";
 import { useEffect } from "react";
@@ -16,7 +16,7 @@ export const NavBar = () => {
     (state) => state.app.currentNote?.currentValue
   );
   const dispatch = useAppDispatch();
-  const isNoteEditable = useAppSelector((state) => state.app.isNoteEditable);
+  const isNoteEditable = useAppSelector((state) => state.navBar.isNoteEditable);
   const [pressedButton, setPressedButton] = useState(""); //className for pressed button
   useEffect(() => {
     if (isNoteEditable) {

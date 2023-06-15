@@ -1,9 +1,10 @@
-import { closeModalAC, deleteNote } from "../../store/appReducer";
+import { deleteNote } from "../../store/navBarReducer";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { closeModalAC } from "../../store/navBarReducer";
 
 export const ModalWindow = () => {
   const dispatch = useAppDispatch();
-  const isModalOpen = useAppSelector((store) => store.app.isModalOpen);
+  const isModalOpen = useAppSelector((store) => store.navBar.isModalOpen);
   const handleDelete = () => {
     dispatch(deleteNote());
   };

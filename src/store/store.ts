@@ -5,10 +5,12 @@ import {
   legacy_createStore as createStore,
 } from "redux";
 import thunkMiddleware from "redux-thunk";
-import appReducer from "./appReducer";
+import { appReducer } from "./appReducer";
+import { navBarReducer } from "./navBarReducer";
 
 let rootReducers = combineReducers({
   app: appReducer,
+  navBar: navBarReducer,
 });
 type rootReducersType = typeof rootReducers;
 export type appStateType = ReturnType<rootReducersType>;
